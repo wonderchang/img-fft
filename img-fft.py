@@ -2,6 +2,8 @@ import numpy as np
 import pylab as plt
 import Image
 import os
+import sys 
+import glob
 
 
 def getImgList(dn): 
@@ -11,10 +13,10 @@ def getImgList(dn):
       fnList.append(file)
   return fnList
 
-def imgFFT(srcFn):
-
-  #Read image 
-  img = Image.open(srcFn).convert('L') 
+def imgFFT(srcDn, srcFn):
+  #Read image
+  print 'Image read:', srcDn + '/' + srcFn, 'fft processing ...'
+  img = Image.open(srcDn + '/' + srcFn).convert('L') 
   y = np.asarray(img) 
 
   #Find the max side length
@@ -26,15 +28,25 @@ def imgFFT(srcFn):
   Y = np.log(abs(Y))
 
   #Get destination filename
-  dstFn = 'fft-' + srcFn
+  dstFn = srcDn + '/fft-' + srcFn
 
   #Save figure
   plt.imshow(Y)
   plt.savefig(dstFn, dpi=96)
+  print dstFn, 'output.'
 
-dn = 'img'
-fnList = getImgList(dn)
+if len(sys.argv) < 2:
+  print 'Usage: python main.py [(filename|directory)+]'
+else:
+  src = sys.argv[1:] 
+  for file in src:
+    if os.path.exists(file): 
+      if os.path.isfile(file): 
+	imgFFT('.', file) 
+      elif os.path.isdir(file):
+	fnList = getImgList(file)
+	for fn in fnList:
+	  imgFFT(file, fn)
 
-for fn in fnList:
-  tmp = dn + '/' + fn
-  imgFFT(tmp)
+
+
