@@ -1,6 +1,7 @@
 import numpy as np
 import pylab as plt
 import Image
+import scipy
 import os
 import sys 
 import glob
@@ -23,7 +24,7 @@ def imgFFT(srcDn, srcFn):
   size = y.shape[0] if y.shape[0] >= y.shape[1] else y.shape[1]
 
   #FFT process
-  Y = np.fft.fft2(y, [size, size])
+  Y = np.fft.fft2(y, [512, 512])
   Y = np.fft.fftshift(Y)
   Y = np.log(abs(Y))
 
@@ -31,12 +32,14 @@ def imgFFT(srcDn, srcFn):
   dstFn = srcDn + '/fft-' + srcFn
 
   #Save figure
-  plt.imshow(Y)
+  plt.imshow(Y).set_clim(0.0, 16.0)
   plt.savefig(dstFn, dpi=96)
   print dstFn, 'output.'
 
+
+
 if len(sys.argv) < 2:
-  print 'Usage: python main.py [(filename|directory)+]'
+  print 'Usage: python img-fft.py [(filename|directory)+]'
 else:
   src = sys.argv[1:] 
   for file in src:
