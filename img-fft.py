@@ -15,13 +15,11 @@ def getImgList(dn):
   return fnList
 
 def imgFFT(srcDn, srcFn):
+
   #Read image
-  print 'Image read:', srcDn + '/' + srcFn, 'fft processing ...'
+  print 'Image read:', srcDn + srcFn, 'fft processing ...'
   img = Image.open(srcDn + '/' + srcFn).convert('L') 
   y = np.asarray(img) 
-
-  #Find the max side length
-  size = y.shape[0] if y.shape[0] >= y.shape[1] else y.shape[1]
 
   #FFT process
   Y = np.fft.fft2(y, [512, 512])
@@ -29,7 +27,7 @@ def imgFFT(srcDn, srcFn):
   Y = np.log(abs(Y))
 
   #Get destination filename
-  dstFn = srcDn + '/fft-' + srcFn
+  dstFn = srcDn + 'fft-' + srcFn
 
   #Save figure
   plt.imshow(Y).set_clim(0.0, 16.0)
@@ -45,9 +43,20 @@ else:
   for file in src:
     if os.path.exists(file): 
       if os.path.isfile(file): 
-	imgFFT('.', file) 
+        if file.endswith('.png') or file.endswith('.jpg') or file.endswith('.jpeg') or file.endswith('.tif') or file.endswith('.bmp'):
+	  array = file.split('/');
+	  if len(array) == 1:
+	    file = './' + file
+	    array = array = file.split('/')
+	  fn = array[len(array) - 1]
+	  array = file.split(fn)
+	  dn = array[0];
+	  imgFFT(dn, fn) 
       elif os.path.isdir(file):
 	fnList = getImgList(file)
+	if not file.endswith('/'):
+	  file = file + '/'
+	print file
 	for fn in fnList:
 	  imgFFT(file, fn)
 
