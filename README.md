@@ -1,7 +1,7 @@
 img-fft
 =======
 
-This program is a tiny tool for fourier transform on image processing. It is implemented by the powerful language, Python, which provides the awesome mathematical libraries like numpy, matplotlib. The program let you generate the results of the fourier transform of the image quickly.
+This program is a tiny tool for fourier transform on image processing. It is implemented by the powerful language, Python, which provides the awesome mathematical library, [Scipy](http://www.scipy.org/). The program let you generate the results of the fourier transform of the image quickly.
 
 How to use
 ======
