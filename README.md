@@ -3,6 +3,24 @@ img-fft
 
 This program is a tiny tool for fourier transform on image processing. It is implemented by the powerful language, Python, which provides the awesome mathematical library, [Scipy](http://www.scipy.org/). The program let you generate the results of the fourier transform of the image quickly.
 
+About
+======
+
+###Image format###
+
+Only png, jpg, jpeg, bmp, tif can read.
+
+###The value of the range
+
+The values of each position on the transform image are processed by log. The range of the values is max = 16, min = 0, The red color represents the high values, blue color means low values.
+
+###Output figure###
+The output figure is an [512X512] resolution patterns of the transform results.
+
+###Output data###
+The output data is an [512X512] matrix, see [fft-data-lena.matrix](fft-data-lena)
+
+
 How to use
 ======
 
