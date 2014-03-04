@@ -12,7 +12,7 @@ Only png, jpg, jpeg, bmp, tif can read.
 
 ###The value of the range
 
-The values of each position on the transform image are processed by log. The range of the values is max = 16, min = 0, The red color represents the high values, blue color means low values.
+The values of each position on the transform image are processed by log finally. The range of the values is max = 16, min = 0. The red color represents the higher value, blue color means lower value.
 
 ###Output figure###
 The output figure is an [512X512] resolution patterns of the transform results.
