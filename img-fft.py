@@ -30,7 +30,7 @@ def imgFFT(srcDn, srcFn, optionMode):
   dataFn = ''
   for name in array[:len(array) - 1]:
     dataFn += name
-  dataFn = srcDn + 'fft-data-' + dataFn
+  dataFn = srcDn + 'fft-data-' + dataFn + '.matrix'
   
   #Save Output
   plt.imshow(Y).set_clim(0.0, 16.0)

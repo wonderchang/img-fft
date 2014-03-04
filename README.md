@@ -18,7 +18,7 @@ The values of each position on the transform image are processed by log. The ran
 The output figure is an [512X512] resolution patterns of the transform results.
 
 ###Output data###
-The output data is an [512X512] matrix, see [fft-data-lena.matrix](fft-data-lena)
+The output data is an [512X512] matrix, see [fft-data-lena.matrix](fft-data-lena.matrix)
 
 
 How to use
