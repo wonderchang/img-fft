@@ -6,13 +6,11 @@ import os
 import sys 
 import glob
 
-
-def getImgList(dn): 
-  fnList = []
-  for file in os.listdir(dn): 
-    if file.endswith('.png') or file.endswith('.jpg') or file.endswith('.jpeg') or file.endswith('.tif') or file.endswith('.bmp'): 
-      fnList.append(file)
-  return fnList
+def getFileExtension(fn):
+  if fn.endswith('.png') or fn.endswith('.jpg') or fn.endswith('.jpeg') or fn.endswith('.tif') or fn.endswith('.bmp'): 
+    return True
+  else: 
+    return False
 
 def imgFFT(srcDn, srcFn):
 
@@ -35,30 +33,45 @@ def imgFFT(srcDn, srcFn):
   print dstFn, 'output.'
 
 
-
 if len(sys.argv) < 2:
   print 'Usage: python img-fft.py [(filename|directory)+]'
 else:
   src = sys.argv[1:] 
-  for file in src:
-    if os.path.exists(file): 
-      if os.path.isfile(file): 
-        if file.endswith('.png') or file.endswith('.jpg') or file.endswith('.jpeg') or file.endswith('.tif') or file.endswith('.bmp'):
-	  array = file.split('/');
-	  if len(array) == 1:
-	    file = './' + file
-	    array = array = file.split('/')
+  for path in src:
+
+    #Check the file exist or not
+    if os.path.exists(path): 
+
+      #Make sure the path is completed
+      if not path.startswith('./'):
+	path = './' + path
+
+      #Check the file or directory
+      if os.path.isfile(path): 
+
+	#Check the file extension
+	if getFileExtension(path):
+
+	  #Get the filename and folder
+	  array = path.split('/')
 	  fn = array[len(array) - 1]
-	  array = file.split(fn)
-	  dn = array[0];
+	  dn = ''
+	  for subPath in array[0:len(array) - 1]:
+	    dn += subPath + '/'
+
+	  #Do the FFT
 	  imgFFT(dn, fn) 
-      elif os.path.isdir(file):
-	fnList = getImgList(file)
-	if not file.endswith('/'):
-	  file = file + '/'
-	print file
-	for fn in fnList:
-	  imgFFT(file, fn)
 
+      elif os.path.isdir(path):
 
+	#Complete the file
+	if path.endswith('/'):
+	  dn = path
+	else: 
+	  dn = path + '/'
+
+	#Get the file list in the directory
+	for fn in os.listdir(path): 
+	  if getFileExtension(fn):
+	    imgFFT(dn, fn)
 
