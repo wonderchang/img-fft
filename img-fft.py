@@ -12,7 +12,7 @@ def getFileExtension(fn):
   else: 
     return False
 
-def imgFFT(srcDn, srcFn):
+def imgFFT(srcDn, srcFn, optionMode):
 
   #Read image
   print 'Image read:', srcDn + srcFn, 'fft processing ...'
@@ -24,19 +24,54 @@ def imgFFT(srcDn, srcFn):
   Y = np.fft.fftshift(Y)
   Y = np.log(abs(Y))
 
-  #Get destination filename
-  dstFn = srcDn + 'fft-' + srcFn
-
-  #Save figure
+  #Make the output filename
+  figureFn = srcDn + 'fft-' + srcFn
+  array = srcFn.split('.')
+  dataFn = ''
+  for name in array[:len(array) - 1]:
+    dataFn += name
+  dataFn = srcDn + 'fft-data-' + dataFn
+  
+  #Save Output
   plt.imshow(Y).set_clim(0.0, 16.0)
-  plt.savefig(dstFn, dpi=96)
-  print dstFn, 'output.'
-
+  if optionMode == 'both' or option == 'figure': 
+    plt.savefig(figureFn, dpi=96) 
+    print figureFn, 'output.'
+  if optionMode == 'both' or option == 'data': 
+    np.savetxt(dataFn, Y, fmt='%.3f', delimiter=',')
+    print dataFn, 'output.'
 
 if len(sys.argv) < 2:
-  print 'Usage: python img-fft.py [(filename|directory)+]'
+  print 'Usage: python img-fft.py [option] [(filename|directory)+]\n'
+  print 'Options:'
+  print '  -f, --figure\tOnly output the FFT figure file'
+  print '  -d, --data\tOnly output the FFT data file'
+  print ''
+  print 'The document and the source can be download at https://github.com/wonderchang/img-fft'
 else:
-  src = sys.argv[1:] 
+  if sys.argv[1].startswith('-'): 
+    if sys.argv[1].startswith('--'):
+      if sys.argv[1].endswith('figure'):
+	option = 'figure'
+      elif sys.argv[1].endswith('data'):
+	option = 'data'
+      else:
+	print 'Error: Unexpected option argument in command line.'
+	sys.exit()
+      src = sys.argv[2:] 
+    else:
+      if sys.argv[1].endswith('f'):
+	option = 'figure'
+      elif sys.argv[1].endswith('d'):
+	option = 'data'
+      else:
+	print 'Error: Unexpected option argument in command line.'
+	sys.exit()
+      src = sys.argv[2:] 
+  else:
+    src = sys.argv[1:] 
+    option = 'both'
+
   for path in src:
 
     #Check the file exist or not
@@ -60,7 +95,7 @@ else:
 	    dn += subPath + '/'
 
 	  #Do the FFT
-	  imgFFT(dn, fn) 
+	  imgFFT(dn, fn, option) 
 
       elif os.path.isdir(path):
 
@@ -73,5 +108,5 @@ else:
 	#Get the file list in the directory
 	for fn in os.listdir(path): 
 	  if getFileExtension(fn):
-	    imgFFT(dn, fn)
+	    imgFFT(dn, fn, option)
 
